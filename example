@@ -1,0 +1,62 @@
+function TMain.Loadfile(filename: Tfilename): boolean;
+var  F: TextFile;
+    S, TempS: string;
+    R,C: integer;
+    P: integer;
+begin
+    AssignFile(F, filename);
+    reset(F);
+    Readln(F,S);
+    r := 0;
+    if pos(',',S) > 0 then
+         begin
+           StatusBar.Panels[2].text := 'READING CSV DATA';
+           sleep(500);
+            // comma read
+            c := 0;
+            reset(F);
+            while not eof(F) do
+                begin
+                   Readln(F,S);
+                   if pos(Filter,S) > 0 then
+                     begin
+                        inc(R);
+                        Table.rowcount := R + 1;
+
+                        for P := 1 to length(S) do
+                          if copy(S,P,1) <> ',' then
+                              TempS := tempS + copy(S,P,1)
+                          else
+                              begin
+                                 Table.Cells[C,R] := tempS;
+                                 TempS := '';
+                                 inc(c);
+                              end;
+
+                        if c = 5 then
+                             begin
+                                Table.Cells[C,R] := tempS;
+                                TempS := '';
+                                c := 0;
+                             end;
+                   end;
+                end;
+            Itemcount := R;
+            Table.repaint;
+            LoadFile := true;
+            StatusBar.Panels[2].text := 'DATA LOADED';
+
+     end
+  else
+     begin
+        showmessage('Data file format error. Not loaded');
+        StatusBar.Panels[2].text := 'NO DATA LOADED';
+        Loadfile := False;
+     end;
+     CloseFile(f);
+     with table do
+        if (atbottom.checked) and (rowcount > 10) then
+            TopRow := rowcount - ((Height div 20)-1);
+     StatusBar.Panels[0].text := DataFilename;
+     StatusBar.Panels[1].text := inttostr(itemcount);
+end;
