@@ -1,5 +1,5 @@
 # Delphi7-CSV Reader
  
-How to use:
-create in project
-function TMain.Loadfile(filename: Tfilename): boolean;
+ <p>How to use:</p>
+<p>create in project</p> 
+<p>function TMain.Loadfile(filename: Tfilename): boolean;</p>
